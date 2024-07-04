@@ -133,8 +133,11 @@ class Perceptron:
         self : object
 
         """
+        # 乱数生成器をインスタンス化
         rgen = np.random.RandomState(self.random_state)
+        # 正規分布に従う乱数を生成し、m（特徴量の個数）次元の実数ベクトルに初期化
         self.w_ = rgen.normal(loc=0.0, scale=0.01, size=X.shape[1])
+        # 0.0 としてバイアス項を初期化
         self.b_ = np.float_(0.)
         
         self.errors_ = []
@@ -142,7 +145,9 @@ class Perceptron:
         for _ in range(self.n_iter):
             errors = 0
             for xi, target in zip(X, y):
+                # 更新 = 学習率 ×（正解-予測）
                 update = self.eta * (target - self.predict(xi))
+                # 重み = ｛学習率 ×（正解-予測）｝ × 特徴量
                 self.w_ += update * xi
                 self.b_ += update
                 errors += int(update != 0.0)
@@ -151,6 +156,7 @@ class Perceptron:
 
     def net_input(self, X):
         """Calculate net input"""
+        # 行列の内積を計算
         return np.dot(X, self.w_) + self.b_
 
     def predict(self, X):
